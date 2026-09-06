@@ -76,11 +76,17 @@ void SaveConfig(char *name, void *ref, bool full) {
 		if (!glMRDevices[i].Running) continue;
 		else p = &glMRDevices[i];
 
-		// new device, add nodes
-		if (!old_doc || !FindMRConfig(old_doc, p->UDN)) {
+		if (old_doc && (dev_node = FindMRConfig(old_doc, p->UDN)) != NULL) {
+			IXML_Node* node;
+			// known device, keep its settings but refresh the name we track
+			ixmlDocument_importNode(doc, dev_node, true, &node);
+			ixmlNode_appendChild(root, node);
+			XMLUpdateNode(doc, node, true, "name", "%s", p->Config.Name);
+		} else {
+			// new device, add nodes
 			dev_node = XMLAddNode(doc, root, "device", NULL);
 			XMLAddNode(doc, dev_node, "udn", p->UDN);
-			XMLAddNode(doc, dev_node, "name", p->Config.Name);
+			XMLAddNode(doc, dev_node, "name", "%s", p->Config.Name);
 			XMLAddNode(doc, dev_node, "mac", "%02x:%02x:%02x:%02x:%02x:%02x", p->Config.mac[0],
 						p->Config.mac[1], p->Config.mac[2], p->Config.mac[3], p->Config.mac[4], p->Config.mac[5]);
 			XMLAddNode(doc, dev_node, "enabled", "%d", (int) p->Config.Enabled);

@@ -1,3 +1,7 @@
+1.11.3
+ - named changed on the device' side where to saved in config file (credits @cocheesen)
+ - device name with % might create a random name
+ 
 1.11.2
  - airupnp: be less aggressive on bye-bye and do a targeted search
  - airupnp: fix group volume calculation

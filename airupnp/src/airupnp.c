@@ -824,7 +824,7 @@ static void *UpdateThread(void *args) {
 
 				// new device so search a free spot - as this function is not called
 				// recursively, no need to lock the device's mutex
-				for (Device = glMRDevices; Device->Running && Device < glMRDevices + glMaxDevices; Device++);
+				for (Device = glMRDevices; Device < glMRDevices + glMaxDevices && Device->Running; Device++);
 
 				// no more room !
 				if (Device == glMRDevices + glMaxDevices) {
